@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Network Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"
+            defer></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <i class="fas fa-network-wired"></i>
+        <span>NETADMIN</span>
+    </div>
+
+    <p class="menu-label">MAIN MENU</p>
+
+    <a href="/" class="nav-link active">
+        <i class="fas fa-chart-line"></i>
+        Dashboard
+    </a>
+
+    <a href="#router-info" class="nav-link">
+        <i class="fas fa-server"></i>
+        Router Information
+    </a>
+
+    <a href="#commands" class="nav-link">
+        <i class="fas fa-terminal"></i>
+        Commands
+    </a>
+
+    <div class="sidebar-bottom">
+        <i class="fas fa-shield-halved"></i>
+        <span>Network Admin Panel</span>
+    </div>
+</div>
+
+
+<div class="main-content">
+
+    <header>
+        <div>
+            <h2>Network Dashboard</h2>
+            <p>Monitor and manage your Cisco router</p>
+        </div>
+
+        <div class="admin-profile">
+            <i class="fas fa-user-circle"></i>
+            <span>Administrator</span>
+        </div>
+    </header>
+
+
+    <section class="welcome">
+        <div>
+            <h1>Welcome Back, Admin!</h1>
+            <p>Manage your network devices in one place.</p>
+        </div>
+
+        <i class="fas fa-network-wired welcome-icon"></i>
+    </section>
+
+
+    <section class="cards" id="router-info">
+
+        <div class="card">
+            <div class="card-icon blue">
+                <i class="fas fa-server"></i>
+            </div>
+
+            <div>
+                <p>Router Device</p>
+                <h3>Cisco Router</h3>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-icon purple">
+                <i class="fas fa-globe"></i>
+            </div>
+
+            <div>
+                <p>IP Address</p>
+                <h3>{{ router_ip }}</h3>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-icon green">
+                <i class="fas fa-terminal"></i>
+            </div>
+
+            <div>
+                <p>Connection Method</p>
+                <h3>Telnet</h3>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="panel" id="commands">
+
+        <div class="panel-header">
+            <div>
+                <h2>Router Commands</h2>
+                <p>Select a command to retrieve router information.</p>
+            </div>
+
+            <span class="live-badge">
+                <span class="dot"></span>
+                Ready
+            </span>
+        </div>
+
+
+        <div class="command-grid">
+
+            <form method="POST" class="command-form">
+                <input type="hidden" name="command" value="version">
+
+                <button type="submit" class="command-button">
+                    <i class="fas fa-circle-info"></i>
+                    <span>
+                        <strong>Show Version</strong>
+                        <small>Device information</small>
+                    </span>
+                    <i class="fas fa-arrow-right arrow"></i>
+                </button>
+            </form>
+
+
+            <form method="POST" class="command-form">
+                <input type="hidden" name="command" value="interfaces">
+
+                <button type="submit" class="command-button">
+                    <i class="fas fa-network-wired"></i>
+                    <span>
+                        <strong>Show Interfaces</strong>
+                        <small>Interface status</small>
+                    </span>
+                    <i class="fas fa-arrow-right arrow"></i>
+                </button>
+            </form>
+
+
+            <form method="POST" class="command-form">
+                <input type="hidden" name="command" value="running">
+
+                <button type="submit" class="command-button">
+                    <i class="fas fa-file-code"></i>
+                    <span>
+                        <strong>Running Config</strong>
+                        <small>Router configuration</small>
+                    </span>
+                    <i class="fas fa-arrow-right arrow"></i>
+                </button>
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <section class="terminal-panel">
+
+        <div class="terminal-header">
+            <div>
+                <i class="fas fa-terminal"></i>
+                <strong>Command Output</strong>
+            </div>
+
+            <span>TERMINAL</span>
+        </div>
+
+
+        <div class="terminal-body">
+
+            {% if error %}
+
+                <div class="error-message">
+                    <i class="fas fa-circle-exclamation"></i>
+                    {{ error }}
+                </div>
+
+            {% elif results is not none %}
+
+                <div class="terminal-command">
+                    admin@cisco-router:~$ {{ selected_command }}
+                </div>
+
+                <pre>{{ results }}</pre>
+
+            {% else %}
+
+                <div class="empty-terminal">
+                    <i class="fas fa-code"></i>
+                    <h3>No Command Executed</h3>
+                    <p>Select one of the router commands above to display its output.</p>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        <p>© 2026 NETADMIN | Network Management System</p>
+        <p>Powered by Flask & Netmiko</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
